@@ -27,6 +27,9 @@ No additional setup is required.
 * Images are downloaded asynchronously for visible rows
 * Search is done offline (filters the already downloaded results)
 
+## Error handling
+* The networking errors are propagated up to the main ViewController, and displayed in a popup
+
 ## Dependencies
 No 3rd party dependencies at the moment. 
 
