@@ -49,6 +49,7 @@ They got their own dedicated targets in the project.
 * Add more sorting options 
 * Add ServiceLocator pattern for services used (currently just DownloadService)
 * Use Core Data to keep results between sessions
+* Extract the strings to Localizable.strings if app should be localized
 
 ## Known issues
 * "Date Taken" is passed in "yyyy-MM-ddThh:mm:ss-08:00" format, which, when converted to CET, sometimes show future dates. To be investigated...
