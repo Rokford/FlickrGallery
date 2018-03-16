@@ -60,21 +60,21 @@ class FlickrGalleryViewController: UIViewController {
     }
     
     @IBAction func sortingButtonTapped(_ sender: Any) {
-        let alertController = UIAlertController(title: nil, message: "Sort the items list. Please note that refreshing the list will reset this settings.", preferredStyle: .actionSheet)
+        let alertController = UIAlertController(title: nil, message: viewModel?.sortAlertMessage, preferredStyle: .actionSheet)
         
-        let sortByDateTakenAction = UIAlertAction(title: "Sort by date taken (newest first)", style: .default) { action in
+        let sortByDateTakenAction = UIAlertAction(title: viewModel?.sortByDateTakenMessage, style: .default) { action in
             self.viewModel?.sortFlickrGalleryItemsByDate(field: .dateTaken, ordering: .orderedDescending)
             self.tableView.reloadData()
         }
         alertController.addAction(sortByDateTakenAction)
         
-        let sortByDatePublishedAction = UIAlertAction(title: "Sort by date published (newest first)", style: .default) { action in
+        let sortByDatePublishedAction = UIAlertAction(title: viewModel?.sortByDatePublishedMessage, style: .default) { action in
             self.viewModel?.sortFlickrGalleryItemsByDate(field: .datePublished, ordering: .orderedDescending)
             self.tableView.reloadData()
         }
         alertController.addAction(sortByDatePublishedAction)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) {
+        let cancelAction = UIAlertAction(title: viewModel?.cancelSortAlertTitle, style: .cancel) {
             action in
         }
         

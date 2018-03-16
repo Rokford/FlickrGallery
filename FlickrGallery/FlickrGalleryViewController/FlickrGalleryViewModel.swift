@@ -9,6 +9,11 @@
 import UIKit
 
 class FlickrGalleryViewModel: NSObject {
+    let sortAlertMessage = "Sort the items list. Please note that refreshing the list will reset this settings."
+    let sortByDateTakenMessage = "Sort by date taken (newest first)"
+    let sortByDatePublishedMessage = "Sort by date published (newest first)"
+    let cancelSortAlertTitle = "Cancel"
+    
     var flickrGalleryItems: [FlickrGalleryTableViewCellViewModel] = []
     var flickrGalleryNotFilteredItems: [FlickrGalleryTableViewCellViewModel] = []
     var delegate: FlickrGalleryViewModelDelegate?
