@@ -9,16 +9,43 @@
 import UIKit
 
 class FlickrFeedDownloadService: NSObject {
-    let urlString = "https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1"
+    let urlString: String = {
+        guard let path = Bundle.main.path(forResource: "Config", ofType: "plist"), let dict = NSDictionary(contentsOfFile: path) as? [String: AnyObject] else {
+            return ""
+        }
+        let url = dict["url"] as! String
+        
+        return url
+    }()
+    
+    let noTitlePlaceholder = "Untitled"
+    let noAuthorPlaceholder = "Unknown"
+    
+    enum HttpMethod: String {
+        case get = "GET"
+        case post = "POST"
+    }
+    
+    enum CustomResponseCode: Int {
+        case wrongUrl = -2
+        case generalError = -1
+    }
+    
+    enum NetworkingErrorDomain: String {
+        case generalDomain = "FlickrFeed"
+    }
     
     typealias ServiceResponse = (AnyObject?, HTTPURLResponse?, NSError?) -> Void
     
     func downloadFlickrFeed(onCompletion: @escaping ([FlickrGalleryTableViewCellViewModel], NSError?) -> Void) {
         
         guard let url = URL(string: urlString) else {
+            let error = NSError(domain: NetworkingErrorDomain.generalDomain.rawValue, code: CustomResponseCode.wrongUrl.rawValue, userInfo: nil)
+            onCompletion([FlickrGalleryTableViewCellViewModel](), error)
+            
             return
         }
-        makeHTTPRequest(url) {
+        makeHTTPRequest(url, httpMethod: .get) {
             json, response, error in
             let parsedItems = self.parseFeedJsonIntoItemsArray(json)
             
@@ -46,10 +73,10 @@ class FlickrFeedDownloadService: NSObject {
                 let flickrGalleryTableViewCellViewModel = FlickrGalleryTableViewCellViewModel()
                 
                 if let title = item["title"] as? String {
-                    flickrGalleryTableViewCellViewModel.title = getStringOrPlaceholder(string: title, placeholder: "Untitled")
+                    flickrGalleryTableViewCellViewModel.title = getStringOrPlaceholder(string: title, placeholder: noTitlePlaceholder)
                 }
                 if let author = item["author"] as? String {
-                    flickrGalleryTableViewCellViewModel.author = getStringOrPlaceholder(string: author, placeholder: "Unknown")
+                    flickrGalleryTableViewCellViewModel.author = getStringOrPlaceholder(string: author, placeholder: noAuthorPlaceholder)
                 }
                 if let dateTaken = item["date_taken"] as? String {
                     flickrGalleryTableViewCellViewModel.parseAndSetDate(fromString: dateTaken, field: .dateTaken)
@@ -91,22 +118,22 @@ class FlickrFeedDownloadService: NSObject {
     
     }
     
-    fileprivate func makeHTTPRequest(_ url: URL, onCompletion: @escaping ServiceResponse) {
+    fileprivate func makeHTTPRequest(_ url: URL, httpMethod: HttpMethod, onCompletion: @escaping ServiceResponse) {
         let request = NSMutableURLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = httpMethod.rawValue
         
         let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
             
             var json: Any?
             var error: NSError?
-            var httpResponseCode = -1
+            var httpResponseCode = CustomResponseCode.generalError.rawValue
             
             if let response = (response as? HTTPURLResponse) {
                 httpResponseCode = response.statusCode
             }
             
             if httpResponseCode != 200 {
-                error = NSError(domain: "FlickrFeed", code: httpResponseCode, userInfo: nil)
+                error = NSError(domain: NetworkingErrorDomain.generalDomain.rawValue, code: httpResponseCode, userInfo: nil)
             }
             
             if data != nil {

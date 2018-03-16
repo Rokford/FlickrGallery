@@ -9,6 +9,12 @@
 import UIKit
 
 class FlickrGalleryTableViewCellViewModel: NSObject {
+    let dateTakenFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+    let datePublishedFormat = "yyyy-MM-dd'T'HH:mm:ssXXXXX"
+    let dateDisplayedFormat = "yyyy-MM-dd HH:mm:ss"
+    let unknownDateString = "Unknown"
+    
+    
     var title: String = ""
     var imageUrl: String = ""
     var dateTaken: Date?
@@ -23,11 +29,11 @@ class FlickrGalleryTableViewCellViewModel: NSObject {
     
     func parseAndSetDate(fromString dateString: String, field: dateFields) {
         if field == .dateTaken {
-            if let date = dateFromString(dateString: dateString, dateFormat: "yyyy-MM-dd'T'HH:mm:ssZ") {
+            if let date = dateFromString(dateString: dateString, dateFormat: dateTakenFormat) {
                 dateTaken = date
             }
         } else {
-            if let date = dateFromString(dateString: dateString, dateFormat: "yyyy-MM-dd'T'HH:mm:ssXXXXX") {
+            if let date = dateFromString(dateString: dateString, dateFormat: datePublishedFormat) {
                 datePublished = date
             }
         }
@@ -36,9 +42,9 @@ class FlickrGalleryTableViewCellViewModel: NSObject {
     func getDateAsString(_ field: dateFields) -> String {
         let date = field == .dateTaken ? dateTaken : datePublished
         if let dateToFormat = date {
-            return stringFromDate(date: dateToFormat, dateFormat: "yyyy-MM-dd HH:mm:ss")
+            return stringFromDate(date: dateToFormat, dateFormat: dateDisplayedFormat)
         } else {
-            return "Unknown"
+            return unknownDateString
         }
     }
     

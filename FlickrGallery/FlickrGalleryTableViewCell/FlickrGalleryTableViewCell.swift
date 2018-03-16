@@ -9,6 +9,7 @@
 import UIKit
 
 class FlickrGalleryTableViewCell: UITableViewCell {
+    let imageViewFrame = CGRect(x: 15, y: 60, width: 100, height: 100)
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var dateTakenLabel: UILabel!
@@ -18,7 +19,7 @@ class FlickrGalleryTableViewCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.imageView?.frame = CGRect(x: 15, y: 60, width: 100, height: 100)
+        self.imageView?.frame = imageViewFrame
         self.imageView?.contentMode = UIViewContentMode.scaleAspectFit
     }
     
