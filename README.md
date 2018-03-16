@@ -26,6 +26,7 @@ No additional setup is required.
 * Images are cached using NSCache
 * Images are downloaded asynchronously for visible rows
 * Search is done offline (filters the already downloaded results)
+* Search results are NOT persisted in Core Data
 
 ## Error handling
 * The networking errors are propagated up to the main ViewController, and displayed in a popup
@@ -35,10 +36,10 @@ No 3rd party dependencies at the moment.
 
 Possible additions:
 * RxSwift in case of more advanced networking tasks or in case of dynamic online search
-* Moya/json mapper to streamline the networking and avoid manually passing JSONs
+* Moya/json mapper to streamline the networking and avoid manually parsing JSONs
 
 ## Tests
-The app contains both regular and UI tests (currenlt just a basic one). 
+The app contains both regular and UI tests (currently just a basic one). 
 They got their own dedicated targets in the project.
 * Regular test are split into ViewModel tests and DownloadService tests
 * Download tasks time is measured in tests
@@ -46,7 +47,7 @@ They got their own dedicated targets in the project.
 ## Possible improvements
 * Display all the images metadata (would also require a decent UI design to fit it adequatly)
 * Add more sorting options 
-* Add ServiceLocator pattern for services used (currently just DonwloadService)
+* Add ServiceLocator pattern for services used (currently just DownloadService)
 
 ## Known issues
 * "Date Taken" is passed in "yyyy-MM-ddThh:mm:ss-08:00" format, which, when converted to CET, sometimes show future dates. To be investigated...
