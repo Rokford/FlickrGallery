@@ -18,9 +18,6 @@ class FlickrFeedDownloadService: NSObject {
         return url
     }()
     
-    let noTitlePlaceholder = "Untitled"
-    let noAuthorPlaceholder = "Unknown"
-    
     enum HttpMethod: String {
         case get = "GET"
         case post = "POST"
@@ -73,10 +70,10 @@ class FlickrFeedDownloadService: NSObject {
                 let flickrGalleryTableViewCellViewModel = FlickrGalleryTableViewCellViewModel()
                 
                 if let title = item["title"] as? String {
-                    flickrGalleryTableViewCellViewModel.title = getStringOrPlaceholder(string: title, placeholder: noTitlePlaceholder)
+                    flickrGalleryTableViewCellViewModel.title = getStringOrPlaceholder(string: title, placeholder: String.noTitlePlaceholder)
                 }
                 if let author = item["author"] as? String {
-                    flickrGalleryTableViewCellViewModel.author = getStringOrPlaceholder(string: author, placeholder: noAuthorPlaceholder)
+                    flickrGalleryTableViewCellViewModel.author = getStringOrPlaceholder(string: author, placeholder: String.noAuthorPlaceholder)
                 }
                 if let dateTaken = item["date_taken"] as? String {
                     flickrGalleryTableViewCellViewModel.parseAndSetDate(fromString: dateTaken, field: .dateTaken)
